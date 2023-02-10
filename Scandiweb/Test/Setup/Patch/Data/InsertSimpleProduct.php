@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Scandiweb\Test\Setup\Patch\Data;
 
-
 use Magento\Catalog\Api\CategoryLinkManagementInterface;
 use Magento\Catalog\Api\Data\ProductInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -21,11 +20,8 @@ use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 
-
 class InsertSimpleProduct implements DataPatchInterface
 {
-
-
     protected ProductInterfaceFactory $productInterfaceFactory;
 
     protected ProductRepositoryInterface $productRepository;
@@ -45,7 +41,6 @@ class InsertSimpleProduct implements DataPatchInterface
     protected array $sourceItems = [];
 
     protected CategoryCollectionFactory $categoryCollectionFactory;
-
 
     public function __construct(
         ProductInterfaceFactory $productInterfaceFactory,
