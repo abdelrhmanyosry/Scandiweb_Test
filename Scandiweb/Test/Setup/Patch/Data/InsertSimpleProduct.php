@@ -22,38 +22,70 @@ use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCo
 
 class InsertSimpleProduct implements DataPatchInterface
 {
+    /**
+     * @var ProductInterfaceFactory
+     */
     protected ProductInterfaceFactory $productInterfaceFactory;
-
+    /**
+     * @var ProductRepositoryInterface
+     */
     protected ProductRepositoryInterface $productRepository;
-
+    /**
+     * @var State
+     */
     protected State $appState;
-
+    /**
+     * @var EavSetup
+     */
     protected EavSetup $eavSetup;
-
+    /**
+     * @var StoreManagerInterface
+     */
     protected StoreManagerInterface $storeManager;
-
+    /**
+     * @var SourceItemInterfaceFactory
+     */
     protected SourceItemInterfaceFactory $sourceItemFactory;
-
+    /**
+     * @var SourceItemsSaveInterface
+     */
     protected SourceItemsSaveInterface $sourceItemsSaveInterface;
-
+    /**
+     * @var CategoryLinkManagementInterface
+     */
     protected CategoryLinkManagementInterface $categoryLink;
-
+    /**
+     * @var array
+     */
     protected array $sourceItems = [];
-
+    /**
+     * @var CategoryCollectionFactory
+     */
     protected CategoryCollectionFactory $categoryCollectionFactory;
 
+    /**
+     * @param ProductInterfaceFactory $productInterfaceFactory
+     * @param ProductRepositoryInterface $productRepository
+     * @param State $appState
+     * @param StoreManagerInterface $storeManager
+     * @param EavSetup $eavSetup
+     * @param SourceItemInterfaceFactory $sourceItemFactory
+     * @param SourceItemsSaveInterface $sourceItemsSaveInterface
+     * @param CategoryLinkManagementInterface $categoryLink
+     * @param CategoryCollectionFactory $categoryCollectionFactory
+     */
     public function __construct(
-        ProductInterfaceFactory $productInterfaceFactory,
-        ProductRepositoryInterface $productRepository,
-        State $appState,
-        StoreManagerInterface $storeManager,
-        EavSetup $eavSetup,
-        SourceItemInterfaceFactory $sourceItemFactory,
-        SourceItemsSaveInterface $sourceItemsSaveInterface,
+        ProductInterfaceFactory         $productInterfaceFactory,
+        ProductRepositoryInterface      $productRepository,
+        State                           $appState,
+        StoreManagerInterface           $storeManager,
+        EavSetup                        $eavSetup,
+        SourceItemInterfaceFactory      $sourceItemFactory,
+        SourceItemsSaveInterface        $sourceItemsSaveInterface,
         CategoryLinkManagementInterface $categoryLink,
-        CategoryCollectionFactory $categoryCollectionFactory
-
-    ) {
+        CategoryCollectionFactory       $categoryCollectionFactory
+    )
+    {
         $this->appState = $appState;
         $this->productInterfaceFactory = $productInterfaceFactory;
         $this->productRepository = $productRepository;
@@ -64,40 +96,37 @@ class InsertSimpleProduct implements DataPatchInterface
         $this->sourceItemsSaveInterface = $sourceItemsSaveInterface;
         $this->categoryLink = $categoryLink;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
-
     }
 
     /**
-     * {@inheritdoc}
+     * @return array
      */
-    public static function getDependencies()  :array
+    public static function getDependencies(): array
     {
         return [];
     }
 
     /**
-     * {@inheritdoc}
+     * @return void
      */
-    public function apply() :void
+    public function apply(): void
     {
         $this->appState->emulateAreaCode('adminhtml', [$this, 'execute']);
     }
 
-     /**
-     * {@inheritdoc}
+    /**
+     * @return array
      */
-    public function getAliases() :array
+    public function getAliases(): array
     {
         return [];
     }
 
     /**
-     * {@inheritdoc}
+     * @return void
      */
-
-    public function execute() :void
+    public function execute(): void
     {
-
         // create the product
         $product = $this->productInterfaceFactory->create();
 
@@ -129,23 +158,22 @@ class InsertSimpleProduct implements DataPatchInterface
 
         $product->setWebsiteIds($websiteIDs);
 
-        $product->setStockData(['use_config_manage_stock' => 1, 'is_qty_decimal' => 0, 'is_in_stock' => 1]); 
+        $product->setStockData(['use_config_manage_stock' => 1, 'is_qty_decimal' => 0, 'is_in_stock' => 1]);
 
         // create a source item
-		$sourceItem = $this->sourceItemFactory->create();
+        $sourceItem = $this->sourceItemFactory->create();
         $sourceItem->setSourceCode('default');
-            // set the quantity of items in stock
+        // set the quantity of items in stock
         $sourceItem->setQuantity(100);
-            // add the product's SKU that will be linked to this source item
+        // add the product's SKU that will be linked to this source item
         $sourceItem->setSku($product->getSku());
-            // set the stock status
+        // set the stock status
         $sourceItem->setStatus(SourceItemInterface::STATUS_IN_STOCK);
         $this->sourceItems[] = $sourceItem;
-    
-            // save the source item
+
+        // save the source item
         $this->sourceItemsSaveInterface->execute($this->sourceItems);
 
         $this->categoryLink->assignProductToCategories($product->getSku(), [3]);
-
     }
 }
