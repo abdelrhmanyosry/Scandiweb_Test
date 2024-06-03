@@ -26,38 +26,47 @@ class InsertSimpleProduct implements DataPatchInterface
      * @var ProductInterfaceFactory
      */
     protected ProductInterfaceFactory $productInterfaceFactory;
+    
     /**
      * @var ProductRepositoryInterface
      */
     protected ProductRepositoryInterface $productRepository;
+    
     /**
      * @var State
      */
     protected State $appState;
+    
     /**
      * @var EavSetup
      */
     protected EavSetup $eavSetup;
+    
     /**
      * @var StoreManagerInterface
      */
     protected StoreManagerInterface $storeManager;
+    
     /**
      * @var SourceItemInterfaceFactory
      */
     protected SourceItemInterfaceFactory $sourceItemFactory;
+    
     /**
      * @var SourceItemsSaveInterface
      */
     protected SourceItemsSaveInterface $sourceItemsSaveInterface;
+    
     /**
      * @var CategoryLinkManagementInterface
      */
     protected CategoryLinkManagementInterface $categoryLink;
+    
     /**
      * @var array
      */
     protected array $sourceItems = [];
+    
     /**
      * @var CategoryCollectionFactory
      */
