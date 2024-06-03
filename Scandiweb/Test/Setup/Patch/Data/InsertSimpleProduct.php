@@ -158,9 +158,7 @@ class InsertSimpleProduct implements DataPatchInterface
             ->setStatus(Status::STATUS_ENABLED);
         // save the product to the repository
         $product = $this->productRepository->save($product);
-
-        // set source item...\
-
+        
         // get the website id from a StoreManagerInterface instance
         $websiteIDs = [$this->storeManager->getStore()->getWebsiteId()];
 
