@@ -183,3 +183,4 @@ class InsertSimpleProduct implements DataPatchInterface
         $this->categoryLink->assignProductToCategories($product->getSku(), [3]);
     }
 }
+
